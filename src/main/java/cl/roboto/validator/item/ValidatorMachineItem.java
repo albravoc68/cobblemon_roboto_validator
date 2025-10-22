@@ -38,12 +38,12 @@ public class ValidatorMachineItem extends BlockItem {
         BlockState bottomState = block.getDefaultState()
                 .with(ValidatorMachineBlock.FACING, facing)
                 .with(ValidatorMachineBlock.PART, ValidatorMachineBlock.Part.BOTTOM)
-                .with(ValidatorMachineBlock.ON, false);
+                .with(ValidatorMachineBlock.STATE, ValidatorMachineBlock.MachineState.OFF);
 
         BlockState topState = block.getDefaultState()
                 .with(ValidatorMachineBlock.FACING, facing)
                 .with(ValidatorMachineBlock.PART, ValidatorMachineBlock.Part.TOP)
-                .with(ValidatorMachineBlock.ON, false);
+                .with(ValidatorMachineBlock.STATE, ValidatorMachineBlock.MachineState.OFF);
 
         world.setBlockState(pos, bottomState, 3);
         world.setBlockState(pos.up(), topState, 3);

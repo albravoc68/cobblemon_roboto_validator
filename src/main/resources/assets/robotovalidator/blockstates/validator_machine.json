@@ -1,62 +1,92 @@
 {
   "variants": {
-    "facing=south,part=top,on=false": {
+    "facing=south,part=top,state=off": {
       "model": "robotovalidator:block/validator_machine_top"
     },
-    "facing=west,part=top,on=false": {
+    "facing=west,part=top,state=off": {
       "model": "robotovalidator:block/validator_machine_top",
       "y": 90
     },
-    "facing=north,part=top,on=false": {
+    "facing=north,part=top,state=off": {
       "model": "robotovalidator:block/validator_machine_top",
       "y": 180
     },
-    "facing=east,part=top,on=false": {
+    "facing=east,part=top,state=off": {
       "model": "robotovalidator:block/validator_machine_top",
       "y": 270
     },
-    "facing=south,part=top,on=true": {
+    "facing=south,part=top,state=on": {
       "model": "robotovalidator:block/validator_machine_top_on"
     },
-    "facing=west,part=top,on=true": {
+    "facing=west,part=top,state=on": {
       "model": "robotovalidator:block/validator_machine_top_on",
       "y": 90
     },
-    "facing=north,part=top,on=true": {
+    "facing=north,part=top,state=on": {
       "model": "robotovalidator:block/validator_machine_top_on",
       "y": 180
     },
-    "facing=east,part=top,on=true": {
+    "facing=east,part=top,state=on": {
       "model": "robotovalidator:block/validator_machine_top_on",
       "y": 270
     },
-    "facing=south,part=bottom,on=false": {
+    "facing=south,part=top,state=success": {
+      "model": "robotovalidator:block/validator_machine_top_success"
+    },
+    "facing=west,part=top,state=success": {
+      "model": "robotovalidator:block/validator_machine_top_success",
+      "y": 90
+    },
+    "facing=north,part=top,state=success": {
+      "model": "robotovalidator:block/validator_machine_top_success",
+      "y": 180
+    },
+    "facing=east,part=top,state=success": {
+      "model": "robotovalidator:block/validator_machine_top_success",
+      "y": 270
+    },
+    "facing=south,part=top,state=fail": {
+      "model": "robotovalidator:block/validator_machine_top_fail"
+    },
+    "facing=west,part=top,state=fail": {
+      "model": "robotovalidator:block/validator_machine_top_fail",
+      "y": 90
+    },
+    "facing=north,part=top,state=fail": {
+      "model": "robotovalidator:block/validator_machine_top_fail",
+      "y": 180
+    },
+    "facing=east,part=top,state=fail": {
+      "model": "robotovalidator:block/validator_machine_top_fail",
+      "y": 270
+    },
+    "facing=south,part=bottom,state=off": {
       "model": "robotovalidator:block/validator_machine_bottom"
     },
-    "facing=west,part=bottom,on=false": {
+    "facing=west,part=bottom,state=off": {
       "model": "robotovalidator:block/validator_machine_bottom",
       "y": 90
     },
-    "facing=north,part=bottom,on=false": {
+    "facing=north,part=bottom,state=off": {
       "model": "robotovalidator:block/validator_machine_bottom",
       "y": 180
     },
-    "facing=east,part=bottom,on=false": {
+    "facing=east,part=bottom,state=off": {
       "model": "robotovalidator:block/validator_machine_bottom",
       "y": 270
     },
-    "facing=south,part=bottom,on=true": {
+    "facing=south,part=bottom,state=on": {
       "model": "robotovalidator:block/validator_machine_bottom"
     },
-    "facing=west,part=bottom,on=true": {
+    "facing=west,part=bottom,state=on": {
       "model": "robotovalidator:block/validator_machine_bottom",
       "y": 90
     },
-    "facing=north,part=bottom,on=true": {
+    "facing=north,part=bottom,state=on": {
       "model": "robotovalidator:block/validator_machine_bottom",
       "y": 180
     },
-    "facing=east,part=bottom,on=true": {
+    "facing=east,part=bottom,state=on": {
       "model": "robotovalidator:block/validator_machine_bottom",
       "y": 270
     }

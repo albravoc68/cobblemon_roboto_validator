@@ -17,6 +17,7 @@ import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
@@ -38,19 +39,20 @@ public class ValidatorMachineBlock extends Block {
 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final EnumProperty<Part> PART = EnumProperty.of("part", Part.class);
-    public static final BooleanProperty ON = BooleanProperty.of("on");
+    public static final EnumProperty<MachineState> STATE = EnumProperty.of("state", MachineState.class);
 
     public ValidatorMachineBlock(Settings settings) {
         super(settings);
         this.setDefaultState(this.stateManager.getDefaultState()
                 .with(FACING, Direction.NORTH)
                 .with(PART, Part.TOP)
-                .with(ON, false));
+                .with(STATE, MachineState.OFF)
+        );
     }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(FACING, PART, ON);
+        builder.add(FACING, PART, STATE);
     }
 
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
@@ -110,13 +112,8 @@ public class ValidatorMachineBlock extends Block {
         if (!topState.isOf(this) || topState.get(PART) != Part.TOP || !bottomState.isOf(this) || bottomState.get(PART) != Part.BOTTOM) {
             return ActionResult.FAIL;
         }
-
-        if (!topState.get(ON)) {
-            world.setBlockState(topPos, topState.with(ON, true), 3);
-            world.setBlockState(bottomPos, bottomState.with(ON, true), 3);
-            world.playSound(null, pos, CobblemonSounds.PC_ON, SoundCategory.BLOCKS, 0.8f, 1.0f);
-            world.scheduleBlockTick(topPos, this, 40);
-            world.scheduleBlockTick(bottomPos, this, 40);
+        if (topState.get(STATE) != MachineState.OFF) {
+            return ActionResult.SUCCESS;
         }
 
         player.sendMessage(Text.literal("§3Evaluating Team:"), false);
@@ -171,7 +168,7 @@ public class ValidatorMachineBlock extends Block {
             }
             List<String> bannedForms = bannedSpecialForms.stream()
                     .filter(sf -> sf.split(":-:")[0]
-                    .equalsIgnoreCase(specie))
+                            .equalsIgnoreCase(specie))
                     .map(sf -> sf.split(":-:")[1])
                     .toList();
             if (bannedForms.stream().anyMatch(name -> name.equalsIgnoreCase(form))) {
@@ -204,13 +201,20 @@ public class ValidatorMachineBlock extends Block {
 
         player.sendMessage(Text.literal(isValid ? "§3Congratulations, your team is valid for this season" : "§4Oh no, your team is not valid for the season"), false);
 
+        if (topState.get(STATE) == MachineState.OFF) {
+            world.setBlockState(topPos, topState.with(STATE, isValid ? MachineState.SUCCESS : MachineState.FAIL), 3);
+            SoundEvent sound = isValid ? CobblemonSounds.EVOLUTION_NOTIFICATION : CobblemonSounds.MOVE_QUICKATTACK_TARGET;
+            world.playSound(null, pos, sound, SoundCategory.BLOCKS, 0.8f, 1.0f);
+            world.scheduleBlockTick(topPos, this, 40);
+        }
+
         return ActionResult.SUCCESS;
     }
 
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (state.get(ON)) {
-            world.setBlockState(pos, state.with(ON, false), 3);
+        if (state.get(STATE) != MachineState.OFF) {
+            world.setBlockState(pos, state.with(STATE, MachineState.OFF), 3);
             if (state.get(PART) == Part.TOP) {
                 world.playSound(null, pos, CobblemonSounds.PC_OFF, SoundCategory.BLOCKS, 0.8f, 1.0f);
             }
@@ -224,6 +228,24 @@ public class ValidatorMachineBlock extends Block {
         private final String name;
 
         Part(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String asString() {
+            return this.name;
+        }
+    }
+
+    public enum MachineState implements StringIdentifiable {
+        ON("on"),
+        SUCCESS("success"),
+        FAIL("fail"),
+        OFF("off");
+
+        private final String name;
+
+        MachineState(String name) {
             this.name = name;
         }
 
